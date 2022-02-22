@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MangeOrder</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg"  style="background-color: rgb(155, 155, 155);">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/" style="color:black;">Home</a>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <% if(isUser) {%> 
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/Cart" style="color:black;" >Cart</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/Cart/Order" style="color:black;" >Order</a>
+              </li>
+              <% } else{%> 
+              <li class="nav-item">
+                <a class="nav-link" href="/login" style="color:black;">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./Suinup" style="color:black;">Sign Up</a>
+              </li>
+             <% } %> 
+              
+
+
+             <% if(isAdmin){ %> 
+                <li class="nav-item">
+                  <a class="nav-link" href="/Admin/Add-prodect" style="color:black;">Add Prodect</a>
+                </li>
+  
+                <li class="nav-item active">
+                  <a class="nav-link active" href="#" style="color:black;">Mange Order</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="/User" style="color:black;">Users</a>
+                </li>
+                 <% } %>
+
+
+
+              <% if(isUser){ %> 
+                <li class="nav-item">
+                  <a class="nav-link" href="/profile" style="color:black;">Profile</a>
+                </li>
+                <% } %> 
+
+
+              <form class="d-flex" style="margin-left: 580px;">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-primary" type="submit">Search</button>
+              </form>
+              <% if(isUser){ %> 
+              <form action="/logout" method="post" style="margin-left: 50px;"> 
+                <input type="submit" value="Logout" class="btn btn-danger">
+              </form>
+              <% } %> 
+
+            </ul>
+           
+            
+          </div>
+        </div>
+      </nav>
+   
+
+      <br><br>
+      <form action="/Cart/MangeOrder" method="get" style="margin-left: 50px;">
+        <button name="Status" value="All">All</button>
+        <button name="Status" value="Pending">Pending</button>
+        <button name="Status" value="Sent">Sent</button>
+        <button name="Status" value="Completed">Completed</button>
+      </form>
+    
+
+    
+      <% if(result.length == 0 ){ %>
+        <p style="text-align: center; margin-top: 350px; background-color: rgb(124, 121, 121); border-radius: 5px;">There are items</p>
+        <% }else{ %>
+               
+        <br>
+        <br>
+         <% for(let t = 0 ; t<result.length ; t++){ %> 
+          <table style="width:100%">
+            <tr>
+              <th></th>
+              <th></th>
+              <th>Name Prodect</th>
+              <th>Quantity</th>
+              <th>time to buy</th>
+              <th>All  Addres</th>
+              <th>Price</th>
+              <th>All Price</th>
+              <th>Status</th>
+              <th>Option</th>
+            </tr>
+            <hr>
+            <tr>
+              <td style="margin-left: 100px;"><%= t+1 %>- </td>
+              <td></td>
+              <td style="margin-left: 20px;"><%= result[t].name %> </td>
+              <td><%= result[t].amount %> </td>
+              <td><%= result[t].taimstamp %> </td>
+              <td><%= result[t].Addres %> </td>
+              <td><%= result[t].Price %> </td>
+              <td><%= result[t].AllPrice %>  $$</td>
+              <td><%= result[t].Status %> </td>
+              <td>
+              <form  method="post">
+             
+             <select name="stauts" id="">
+               <option value="Pending">Pending</option>
+               <option value="Sent">Sent</option>
+               <option value="Completed">Completed</option>
+             </select>
+             <input type="submit" value="Save" class="btn btn-primary" formaction="/Cart/MangeOrder/Save/<%= result[t]._id %> ">
+             
+             <input type="submit" value="Cancellation" class="btn btn-danger" formaction="/Cart/Order/Delte/<%= result[t]._id %> "  >
+             
+              </form>
+              </td>
+            </tr>
+                        
+          </table>
+          
+          <br> <br>
+          <% } %> 
+          <% } %>  
+
+           
+
+
+
+          <form action="/Cart/Order/DeleteAll" method="post">
+            <input type="submit" value="Cancellation All" class="btn btn-danger" style="margin-top: 200px; margin-left: 1360px;"> 
+          </form>
+
+</body>
+</html>
